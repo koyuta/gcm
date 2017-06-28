@@ -68,5 +68,18 @@ func cmdRun(c *cli.Context) {
 }
 
 func cmdRm(c *cli.Context) {
-	fmt.Println("cmdRm")
+	name := c.Args().First()
+	if name == "" {
+		cli.ShowCommandHelp(c, "rm")
+		os.Exit(1)
+	}
+
+	dir := fmt.Sprintf("%s/%s", root, name)
+	_, err := os.Stat(dir)
+	if err == nil {
+		if err := os.RemoveAll(dir); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
 }
